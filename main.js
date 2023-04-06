@@ -5,6 +5,19 @@ const form = document.getElementById('form-itens');
 const itensInput = document.getElementById('receber-item');
 const ulItens = document.getElementById('lista-de-itens');
 const ulItensComprados = document.getElementById('itens-comprados');
+const listaRecuperada = localStorage.getItem('listaDeItens');
+
+
+function atualizaLocalStorage() {
+    localStorage.setItem('listaDeItens', JSON.stringify(listaDeItens));
+}
+
+if (listaRecuperada) {
+    listaDeItens = JSON.parse(listaRecuperada);
+    mostrarItens();
+} else {
+    listaDeItens = [];
+}
 
 form.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -57,11 +70,11 @@ function mostrarItens() {
             <li class="item-compra is-flex is-justify-content-space-between" data-value="${index}">
             <div>
                 <input type="checkbox" class="is-clickable" />
-                <input type="text" class="is-size-5" value="${elemento.valor}" ${index !== Number(itemAEditar) ? 'disabled' : '' } ></input>
+                <input type="text" class="is-size-5" value="${elemento.valor}" ${index !== Number(itemAEditar) ? 'disabled' : ''} ></input>
                 </div>
 
             <div>
-              ${ index === Number( itemAEditar) ? '<button onclick="salvarEdicao()"<i class="fa-regular fa-floppy-disk is-clickable"></i></button>' : '<i class="fa-regular is-clickable fa-pen-to-square editar"></i>'}
+              ${index === Number(itemAEditar) ? '<button onclick="salvarEdicao()"<i class="fa-regular fa-floppy-disk is-clickable"></i></button>' : '<i class="fa-regular is-clickable fa-pen-to-square editar"></i>'}
                 <i class="fa-solid fa-trash is-clickable deletar"></i>
             </div>
             </li>
@@ -81,6 +94,8 @@ function mostrarItens() {
 
         })
     });
+
+    atualizaLocalStorage();
 
     const deleteItem = document.querySelectorAll('.deletar');
 
